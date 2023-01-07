@@ -1,4 +1,13 @@
-💎 Use a DNS over HTTPS server that doesn't have a stable IP address 💎
+<h3 align="center">
+  <br>
+  <a href="https://github.com/HotCakeX/Harden-Windows-Security"><img src="https://github.com/HotCakeX/Harden-Windows-Security/blob/main/png-donut-2.png" alt="Avatar" width="200"></a>
+  <br />
+  <br>
+  💎 Use a DNS over HTTPS server that doesn't have a stable IP address 💎
+  <br>
+</h3>
+
+
 
 This Module will automatically identify the correct and active network adapter/interface and set the Secure DNS settings for it based on parameters supplied by user.
 even if Hyper-V virtual switches (Internal, Private, External) are being used and the physical network adapter is virtualized by Hyper-V virtual switch manager or
@@ -8,10 +17,26 @@ You can create a self-hosted DoH server for free on Cloudflare or other provider
 please refer to the Github repository of serverless-dns for more info: https://github.com/serverless-dns/serverless-dns
 
 
+How to install this module:
+
+```PowerShell
+
+Install-Module -Name Set-DynamicIPDoHServer
+
+```
+
 Example usage:
 
-using module's alias: set-ddoh -DoHTemplate "https://example.com/" -DoHDomain "example.com"
-using module's name:  set-dynamicIPDoHServer -DoHTemplate "https://example.com/" -DoHDomain "example.com"
+
+```PowerShell
+
+# using module's alias
+set-ddoh -DoHTemplate "https://example.com/" -DoHDomain "example.com"
+# using module's name
+set-dynamicIPDoHServer -DoHTemplate "https://example.com/" -DoHDomain "example.com"
+
+```
+
 
 
 ✅ Created, targeted and tested on the latest version of Windows 11
@@ -25,7 +50,13 @@ in order to check for new IP changes for the dynamic DoH server.
 it will first attempt to use the DNS servers set on the system, if it fails to resolve the DoH domain, it will then use Cloudflare's 1.1.1.1 to resolve the IP addresses of the dynamic DoH server.
 DNS queries made to Cloudflare's 1.1.1.1 will be un-encrypted and in plain text. in the future, the module will use TLS encrypted queries whenever system's secure DNS is unavailable.
 
-🛑 Make sure you have the latest stable PowerShell installed from Github before running this module: https://github.com/PowerShell/PowerShell/releases/latest
-(store installed version currently not supported, but soon will be)
+<h1> <br> </h1>
+</br>
+
+> __Warning__  <h5> Make sure you have the latest stable PowerShell installed from Github before running this module: https://github.com/PowerShell/PowerShell/releases/latest
+(store installed version currently not supported, but soon will be)</h5>
+
+ </br>
+
 
 🏴 Disclaimer: neither me, nor this module, is affiliated with serverless-dns, however, since it's a great product and I personally use it, I decided to share this module to help easily use it on Windows.
