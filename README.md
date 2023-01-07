@@ -14,6 +14,7 @@ even if Hyper-V virtual switches (Internal, Private, External) are being used an
 VPN's virtual network adapter is being used, all at the same time, the module will still find and enable DoH settings for the correct adapter.
 
 You can create a self-hosted DoH server for free on Cloudflare or other providers, with custom domain name and dynamic IP addresses, which are hard or costly for ISPs, governments etc. to block
+
 please refer to the Github repository of serverless-dns for more info: https://github.com/serverless-dns/serverless-dns
 
 
@@ -54,7 +55,7 @@ in order to check for new IP changes for the dynamic DoH server.
 
 - in order to make sure the module will be able to always acquire the IP addresses of the dynamic DoH server, even when the currently set IPv4s and IPv6s are outdated,
 it will first attempt to use the DNS servers set on the system, if it fails to resolve the DoH domain, it will then use Cloudflare's 1.1.1.1 to resolve the IP addresses of the dynamic DoH server.
-DNS queries made to Cloudflare's 1.1.1.1 will be un-encrypted and in plain text. in the future, the module will use TLS encrypted queries whenever system's secure DNS is unavailable.
+DNS queries made to Cloudflare's 1.1.1.1 will be un-encrypted and in plain text.
 
  
 ---
