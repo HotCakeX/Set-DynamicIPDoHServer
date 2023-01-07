@@ -12,10 +12,10 @@
 RootModule = 'Set-DynamicIPDoHServer.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.4'
+ModuleVersion = '0.0.6'
 
 # Supported PSEditions
-# CompatiblePSEditions = @()
+CompatiblePSEditions = @("Desktop","Core")
 
 # ID used to uniquely identify this module
 GUID = '85d391d8-097a-4394-b8b7-6eb98eeabb0e'
@@ -33,13 +33,14 @@ Copyright = '(c)2023'
 Description = @"
 
 
-💎 Use a DNS over HTTPS server that doesn't have a stable IP address 💎
+💎 Use a DNS over HTTPS server that doesn't have a stable IP address, on Windows 11 💎
 
-This Module will automatically identify the correct and active network adapter/interface and set the Secure DNS settings for it based on parameters supplied by user.
+This module will automatically identify the correct and active network adapter/interface and set the Secure DNS settings for it based on parameters supplied by user.
 even if Hyper-V virtual switches (Internal, Private, External) are being used and the physical network adapter is virtualized by Hyper-V virtual switch manager or 
 VPN's virtual network adapter is being used, all at the same time, the module will still find and enable DoH settings for the correct adapter.
 
 You can create a self-hosted DoH server for free on Cloudflare or other providers, with custom domain name and dynamic IP addresses, which are hard or costly for ISPs, governments etc. to block
+
 please refer to the Github repository of serverless-dns for more info: https://github.com/serverless-dns/serverless-dns
 
 
@@ -58,12 +59,16 @@ in order to check for new IP changes for the dynamic DoH server.
 
 ✅ in order to make sure the module will be able to always acquire the IP addresses of the dynamic DoH server, even when the currently set IPv4s and IPv6s are outdated,
 it will first attempt to use the DNS servers set on the system, if it fails to resolve the DoH domain, it will then use Cloudflare's 1.1.1.1 to resolve the IP addresses of the dynamic DoH server.
-DNS queries made to Cloudflare's 1.1.1.1 will be un-encrypted and in plain text. in the future, the module will use TLS encrypted queries whenever system's secure DNS is unavailable.
+DNS queries made to Cloudflare's 1.1.1.1 will be un-encrypted and in plain text.
 
 🛑 Make sure you have the latest stable PowerShell installed from Github before running this module: https://github.com/PowerShell/PowerShell/releases/latest
 (store installed version currently not supported, but soon will be)
 
 🏴 Disclaimer: neither me, nor this module, is affiliated with serverless-dns, however, since it's a great product and I personally use it, I decided to share this module to help easily use it on Windows.
+
+
+🔷 if you have any feedback about this module, please open a new issue or discussion on Github:
+https://github.com/HotCakeX/Set-DynamicIPDoHServer
 
 "@
 
@@ -122,7 +127,7 @@ AliasesToExport = @("set-ddoh")
 # ModuleList = @()
 
 # List of all files packaged with this module
-# FileList = @()
+FileList = @("Set-DynamicIPDoHServer.psd1","Set-DynamicIPDoHServer.psm1")
 
 # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
 PrivateData = @{
@@ -139,7 +144,7 @@ PrivateData = @{
         ProjectUri = 'https://github.com/HotCakeX/Set-DynamicIPDoHServer'
 
         # A URL to an icon representing this module.
-        # IconUri = ''
+        IconUri = 'https://raw.githubusercontent.com/HotCakeX/Set-DynamicIPDoHServer/main/icon.png'
 
         # ReleaseNotes of this module
         ReleaseNotes = @"
@@ -149,6 +154,8 @@ PrivateData = @{
 * 0.0.2 added new parameter to ask user for DoH domain, also it can now choose the correct network adapter if both virtual VPN adapters and Hyper-V virtual switches are being used, all at the time time
 * 0.0.3 added more details for the PowerShell Gallery's page
 * 0.0.4 fixed some typos in PowerShell Gallery's description page
+* 0.0.5 added an icon for the module
+* 0.0.6 again fixed the PowerShell description text in PowerShell Gallery
 
 "@
 
