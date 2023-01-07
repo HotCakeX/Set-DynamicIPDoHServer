@@ -1,6 +1,6 @@
 <h3 align="center">
   <br>
-  <a href="https://github.com/HotCakeX/Harden-Windows-Security"><img src="https://github.com/HotCakeX/Harden-Windows-Security/blob/main/png-donut-2.png" alt="Avatar" width="200"></a>
+  <a href="https://github.com/HotCakeX/Set-DynamicIPDoHServer"><img src="https://raw.githubusercontent.com/HotCakeX/Set-DynamicIPDoHServer/main/fdsf.jpg" alt="Avatar" width="200"></a>
   <br />
   <br>
   💎 Use a DNS over HTTPS server that doesn't have a stable IP address 💎
