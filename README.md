@@ -49,7 +49,7 @@ set-dynamicIPDoHServer -DoHTemplate "https://example.com/" -DoHDomain "example.c
 - Created, targeted and tested on the latest version of Windows 11
 
 - Once you run this module for the first time and supply it with your DoH template and DoH domain, it will create a scheduled task that will run every ~5 minutes
-in order to check for new IP changes for the dynamic DoH server.
+in order to check for new IP changes for the dynamic DoH server. You can change the interval in Task Scheduler.
 
 - the module and the scheduled task will use both IPv4s and IPv6s of the dynamic DoH server. the task will run whether or not any user is logged on.
 
