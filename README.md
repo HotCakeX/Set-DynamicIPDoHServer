@@ -48,8 +48,7 @@ set-dynamicIPDoHServer -DoHTemplate "https://example.com/" -DoHDomain "example.c
  
 - Created, targeted and tested on the latest version of Windows 11
 
-- Once you run this module for the first time and supply it with your DoH template and DoH domain, it will create a scheduled task that will run every ~5 minutes
-in order to check for new IP changes for the dynamic DoH server. You can change the interval in Task Scheduler.
+- Once you run this module for the first time and supply it with your DoH template and DoH domain, it will create a scheduled task that will run the module automatically based on 2 distinct criteria; 1) as soon as Windows detects the current DNS servers are unreachable 2) every 2 hours in order to check for new IP changes for the dynamic DoH server. You can fine-tune the interval in Task Scheduler GUI if you like. I haven't had any downtimes in my tests because the module runs miliseconds after Windows detects DNS servers are unreachable, and even then, Windows still maintains the current active connections using the DNS cache. if your experience is different, please let me know on Github.
 
 - the module and the scheduled task will use both IPv4s and IPv6s of the dynamic DoH server. the task will run whether or not any user is logged on.
 
