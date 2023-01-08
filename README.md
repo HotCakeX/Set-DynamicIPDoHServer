@@ -105,7 +105,7 @@ DNS queries made to Cloudflare's 1.1.1.1 will be un-encrypted and in plain text.
 <!-- GETTING STARTED -->
 ## Getting Started
 
-if you already have the module installed, make sure it's up-to-date
+if you already have the module installed, make sure [it's up-to-date](https://learn.microsoft.com/en-us/powershell/module/powershellget/update-module)
 
 ```PowerShell
 
@@ -115,7 +115,7 @@ Update-Module -Name Set-DynamicIPDoHServer -force
 
 ### Prerequisites
 
-Make sure you have the latest stable PowerShell installed from Github before running this module: https://github.com/PowerShell/PowerShell/releases/latest 
+Make sure you have [the latest stable PowerShell installed from Github](https://github.com/PowerShell/PowerShell/releases/latest) before running this module. if it's your first time installing that PowerShell, restart your computer after installation so task scheduler will recognize `pwsh.exe` required for running this module.
 
 > **Note**
 > store installed version currently not supported, but soon will be</h5>
