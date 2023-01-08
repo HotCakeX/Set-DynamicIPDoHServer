@@ -263,11 +263,30 @@ catch { write-host "these errors occured after running the module" -ForegroundCo
     }
 
 
+
+
+
+
+# for debugging purposes, uncomment this to get more info about the event
+# Get-WinEvent -ListLog Microsoft-Windows-DNS-Client/Operational | Format-List is*
+
+# here we enable logging for the event log below (which is disabled by default) and set its log size from the default 1MB to 2MB
+$logName = 'Microsoft-Windows-DNS-Client/Operational'
+
+$log = New-Object System.Diagnostics.Eventing.Reader.EventLogConfiguration $logName
+$log.MaximumSizeInBytes=2048000
+$log.IsEnabled=$true
+$log.SaveChanges()
+
+
+
+
+
+
+
 if (!$ModuleErrors) {
   
    write-host "No errors occured when running the module, creating the scheduled task now if it's not already been created" -ForegroundColor green 
-
-
 
 
 
@@ -279,21 +298,46 @@ if (-NOT (Get-ScheduledTask -TaskName "Dynamic DoH Server IP check" -ErrorAction
     
 $action = New-ScheduledTaskAction -Execute "pwsh.exe" -Argument "-executionPolicy bypass -command `"set-ddoh -DoHTemplate '$DoHTemplate' -DoHDomain '$DoHDomain'`""
 
+
 $TaskPrincipal = New-ScheduledTaskPrincipal -LogonType S4U -UserId $env:USERNAME -RunLevel Highest
 
-$trigger = 
-  New-ScheduledTaskTrigger `
-    -Once -At (Get-Date).AddSeconds(50) `
-    -RandomDelay (New-TimeSpan -Seconds 30) `
-    -RepetitionInterval (New-TimeSpan -Minutes 5)
 
-Register-ScheduledTask -Action $action -Trigger $trigger -Principal $TaskPrincipal -TaskPath "DDoH" -TaskName "Dynamic DoH Server IP check" -Description "Checks for New IPs of our Dynamic DoH server"
 
+
+# trigger 1
+$CIMTriggerClass =
+Get-CimClass -ClassName MSFT_TaskEventTrigger -Namespace Root/Microsoft/Windows/TaskScheduler:MSFT_TaskEventTrigger
+$EventTrigger = New-CimInstance -CimClass $CIMTriggerClass -ClientOnly
+$EventTrigger.Subscription =
+@"
+<QueryList><Query Id="0" Path="Microsoft-Windows-DNS-Client/Operational"><Select Path="Microsoft-Windows-DNS-Client/Operational">*[System[Provider[@Name='Microsoft-Windows-DNS-Client'] and EventID=1013]]</Select></Query></QueryList>
+"@
+$EventTrigger.Enabled = $True
+
+
+
+# trigger 2
+$Time = 
+New-ScheduledTaskTrigger `
+  -Once -At (Get-Date).AddHours(1) `
+  -RandomDelay (New-TimeSpan -Seconds 30) `
+  -RepetitionInterval (New-TimeSpan -Hours 2)
+
+
+
+# register the task
+Register-ScheduledTask -Action $action -Trigger $EventTrigger,$Time -Principal $TaskPrincipal -TaskPath "DDoH" -TaskName "Dynamic DoH Server IP check" -Description "Checks for New IPs of our Dynamic DoH server"
+
+# define advanced settings for the task
 $TaskSettings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -Compatibility Win8 -StartWhenAvailable
 
+# add advanced settings we defined to the task
 Set-ScheduledTask -TaskPath "DDoH" -TaskName "Dynamic DoH Server IP check" -Settings $TaskSettings 
 
 }
+
+
+
 
 
 
