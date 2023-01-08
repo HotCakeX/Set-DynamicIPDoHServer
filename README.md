@@ -77,7 +77,7 @@ You can create a self-hosted DoH server for free on Cloudflare or other provider
 please refer to the Github repository of serverless-dns for more info: https://github.com/serverless-dns/serverless-dns
 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right"><a href="#readme-top">💡(back to top)</a></p>
 
 
 
@@ -100,7 +100,7 @@ it will first attempt to use the DNS servers set on the system, if it fails to r
 DNS queries made to Cloudflare's 1.1.1.1 will be un-encrypted and in plain text.
 
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right"><a href="#readme-top">💡(back to top)</a></p>
 
 <!-- GETTING STARTED -->
 ## Getting Started
@@ -128,7 +128,7 @@ Install-Module -Name Set-DynamicIPDoHServer
 
 ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right"><a href="#readme-top">💡(back to top)</a></p>
 
 
 
@@ -144,7 +144,7 @@ set-dynamicIPDoHServer -DoHTemplate "https://example.com/" -DoHDomain "example.c
 
 ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+<p align="right"><a href="#readme-top">💡(back to top)</a></p>
 
 
 
