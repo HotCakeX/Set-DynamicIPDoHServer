@@ -77,8 +77,6 @@ You can create a self-hosted DoH server for free on Cloudflare or other provider
 please refer to the Github repository of serverless-dns for more info: https://github.com/serverless-dns/serverless-dns
 
 
-<p align="right"><a href="#readme-top">💡(back to top)</a></p>
-
 
 
 <!-- FEATURES -->
@@ -128,7 +126,6 @@ Install-Module -Name Set-DynamicIPDoHServer
 
 ```
 
-<p align="right"><a href="#readme-top">💡(back to top)</a></p>
 
 
 
