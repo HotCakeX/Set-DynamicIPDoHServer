@@ -159,7 +159,7 @@ PrivateData = @{
 * 0.0.5 added an icon for the module
 * 0.0.6 again fixed the PowerShell description text in PowerShell Gallery
 * 0.0.7 modified the scheduled task trigger to run every 2 hours and added a 2nd trigger so the module will run the moment system detects DNS failure
-* 0.0.8 fixed the typo in the line above, literally, improved PowerShell Gallery description, and set the scheduled task to end if it runs continiously longer than 1 minute
+* 0.0.8 fixed the typo in the line above, literally, improved PowerShell Gallery description, and set the scheduled task to end if it runs continuously longer than 1 minute
 "@
 
         # Prerelease string of this module
