@@ -12,7 +12,7 @@
 RootModule = 'Set-DynamicIPDoHServer.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.7'
+ModuleVersion = '0.0.8'
 
 # Supported PSEditions
 CompatiblePSEditions = @("Desktop","Core")
@@ -50,7 +50,7 @@ using module's alias: set-ddoh -DoHTemplate "https://example.com/" -DoHDomain "e
 using module's name:  set-dynamicIPDoHServer -DoHTemplate "https://example.com/" -DoHDomain "example.com"
 
 
-✅ Created, targeted and tested on the latest version of Windows 11
+✅ Created, targeted and tested on the latest version of Windows 11, on physical hardware and Virtual Machines
 
 ✅ Once you run this module for the first time and supply it with your DoH template and DoH domain, it will create a scheduled task that will run the module automatically
 based on 2 distinct criteria; 1) as soon as Windows detects the current DNS servers are unreachable 2) every 2 hours in order to check for new IP changes for the dynamic DoH server.
@@ -158,7 +158,8 @@ PrivateData = @{
 * 0.0.4 fixed some typos in PowerShell Gallery's description page
 * 0.0.5 added an icon for the module
 * 0.0.6 again fixed the PowerShell description text in PowerShell Gallery
-* 0.0.7 modified the scheduled task trigger to run every 2 hours and added a 2nd trigger so the module will the moment system detects DNS failure
+* 0.0.7 modified the scheduled task trigger to run every 2 hours and added a 2nd trigger so the module will run the moment system detects DNS failure
+* 0.0.8 fixed the typo in the line above, literally, improved PowerShell Gallery description, and set the scheduled task to end if it runs continiously longer than 1 minute
 "@
 
         # Prerelease string of this module
