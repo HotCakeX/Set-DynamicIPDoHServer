@@ -12,7 +12,7 @@
 RootModule = 'Set-DynamicIPDoHServer.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.6'
+ModuleVersion = '0.0.7'
 
 # Supported PSEditions
 CompatiblePSEditions = @("Desktop","Core")
@@ -52,8 +52,10 @@ using module's name:  set-dynamicIPDoHServer -DoHTemplate "https://example.com/"
 
 ✅ Created, targeted and tested on the latest version of Windows 11
 
-✅ Once you run this module for the first time and supply it with your DoH template and DoH domain, it will create a scheduled task that will run every ~5 minutes
-in order to check for new IP changes for the dynamic DoH server.
+✅ Once you run this module for the first time and supply it with your DoH template and DoH domain, it will create a scheduled task that will run the module automatically
+based on 2 distinct criteria; 1) as soon as Windows detects the current DNS servers are unreachable 2) every 2 hours in order to check for new IP changes for the dynamic DoH server.
+You can fine-tune the interval in Task Scheduler GUI if you like. I haven't had any downtimes in my tests because the module runs miliseconds after Windows detects DNS servers are unreachable,
+and even then, Windows still maintains the current active connections using the DNS cache. if your experience is different, please let me know on Github.
 
 ✅ the module and the scheduled task will use both IPv4s and IPv6s of the dynamic DoH server. the task will run whether or not any user is logged on.
 
@@ -64,7 +66,7 @@ DNS queries made to Cloudflare's 1.1.1.1 will be un-encrypted and in plain text.
 🛑 Make sure you have the latest stable PowerShell installed from Github before running this module: https://github.com/PowerShell/PowerShell/releases/latest
 (store installed version currently not supported, but soon will be)
 
-🏴 Disclaimer: neither me, nor this module, is affiliated with serverless-dns, however, since it's a great product and I personally use it, I decided to share this module to help easily use it on Windows.
+🏴 Disclaimer: I'm not the developer of Serverless-dns, however, since it's a great product and I personally use it, I decided to share this module so that Windows users can easily use it.
 
 
 🔷 if you have any feedback about this module, please open a new issue or discussion on Github:
@@ -156,7 +158,7 @@ PrivateData = @{
 * 0.0.4 fixed some typos in PowerShell Gallery's description page
 * 0.0.5 added an icon for the module
 * 0.0.6 again fixed the PowerShell description text in PowerShell Gallery
-
+* 0.0.7 modified the scheduled task trigger to run every 2 hours and added a 2nd trigger so the module will the moment system detects DNS failure
 "@
 
         # Prerelease string of this module
