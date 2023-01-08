@@ -85,13 +85,17 @@ please refer to the Github repository of serverless-dns for more info: https://g
 ## Features
 
 
-- Created, targeted and tested on the latest version of Windows 11, on physical hardware and Virtual Machines
+* Created, targeted and tested on the latest version of Windows 11, on physical hardware and Virtual Machines
 
-- Once you run this module for the first time and supply it with your DoH template and DoH domain, it will create a scheduled task that will run the module automatically based on 2 distinct criteria; 1) as soon as Windows detects the current DNS servers are unreachable 2) every 2 hours in order to check for new IP changes for the dynamic DoH server. You can fine-tune the interval in Task Scheduler GUI if you like. I haven't had any downtimes in my tests because the module runs miliseconds after Windows detects DNS servers are unreachable, and even then, Windows still maintains the current active connections using the DNS cache. if your experience is different, please let me know on Github.
+* Once you run this module for the first time and supply it with your DoH template and DoH domain, it will create a scheduled task that will run the module automatically based on 2 distinct criteria:
+  -  as soon as Windows detects the current DNS servers are unreachable
+  -  every 2 hours in order to check for new IP changes for the dynamic DoH server
 
-- the module and the scheduled task will use both IPv4s and IPv6s of the dynamic DoH server. the task will run whether or not any user is logged on.
+You can fine-tune the interval in Task Scheduler GUI if you like. I haven't had any downtimes in my tests because the module runs miliseconds after Windows detects DNS servers are unreachable, and even then, Windows still maintains the current active connections using the DNS cache. if your experience is different, please let me know on Github.
 
-- in order to make sure the module will be able to always acquire the IP addresses of the dynamic DoH server, even when the currently set IPv4s and IPv6s are outdated,
+* the module and the scheduled task will use both IPv4s and IPv6s of the dynamic DoH server. the task will run whether or not any user is logged on.
+
+* in order to make sure the module will be able to always acquire the IP addresses of the dynamic DoH server, even when the currently set IPv4s and IPv6s are outdated,
 it will first attempt to use the DNS servers set on the system, if it fails to resolve the DoH domain, it will then use Cloudflare's 1.1.1.1 to resolve the IP addresses of the dynamic DoH server.
 DNS queries made to Cloudflare's 1.1.1.1 will be un-encrypted and in plain text.
 
