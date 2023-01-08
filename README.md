@@ -26,11 +26,22 @@
   </p>
 </div>
 
+<p align="center">
 
-![PowerShell Gallery!](https://img.shields.io/powershellgallery/v/Set-DynamicIPDoHServer?style=social "PowerShell Gallery")
-
-![PowerShell Gallery Downloads!](https://img.shields.io/powershellgallery/dt/Set-DynamicIPDoHServer?style=social "PowerShell Gallery Downloads")
-
+	
+	
+  <a href="https://www.powershellgallery.com/packages/Set-DynamicIPDoHServer">
+    <img src="https://img.shields.io/powershellgallery/v/Set-DynamicIPDoHServer?style=social"
+         alt="PowerShell Gallery">
+  </a>
+	
+	
+  <a href="https://www.powershellgallery.com/packages/Set-DynamicIPDoHServer">
+    <img src="https://img.shields.io/powershellgallery/dt/Set-DynamicIPDoHServer?style=social"
+         alt="PowerShell Gallery Downloads count">
+  </a>
+ 
+</p>
 
 <!-- TABLE OF CONTENTS -->
 <details>
