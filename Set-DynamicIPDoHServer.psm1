@@ -32,7 +32,7 @@ If (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
   if ($dohTemplate -notmatch '^https\:\/\/.+\..+\/.*')
 
   {
-    write-host "The DNS over HTTPS (DoH) template starts with HTTPS:// and needs a / after the TLD" -ForegroundColor Magenta
+    write-host "DNS over HTTPS (DoH) template starts with HTTPS:// and needs a / after the TLD" -ForegroundColor Magenta
     
     Break
     }
@@ -74,14 +74,14 @@ $ActiveNetworkInterface = Get-NetRoute -DestinationPrefix '0.0.0.0/0', '::/0' |
       # checks if the detected active interface from the previous step is virtual, if it is, checks if it's an external virtual Hyper-V network adapter or VPN virtual network adapter
         if ((Get-NetAdapter | Where-Object { $_.InterfaceGuid -eq $ActiveNetworkInterface.InterfaceGuid}).Virtual)
         {
-            Write-Host "Interface is virtual" -ForegroundColor Magenta
+            Write-Host "Interface is virtual, trying to find out if it's a VPN virtual adapter or Hyper-V External virtual switch" -ForegroundColor Magenta
 
             # if it's an external virtual Hyper-V network adapter, it must be the correct adapter
             if ($ActiveNetworkInterface.InterfaceDescription -like "*Hyper-V Virtual Ethernet Adapter*"  )
 
             {
 
-                Write-Host "this is virtual but OK because it's Hyper-V External switch that is active" -ForegroundColor Magenta
+                Write-Host "The detected active network adapter is virtual but that's OK because it's Hyper-V External switch" -ForegroundColor Magenta
                    $ActiveNetworkInterface = $ActiveNetworkInterface
             }
               
@@ -89,7 +89,7 @@ $ActiveNetworkInterface = Get-NetRoute -DestinationPrefix '0.0.0.0/0', '::/0' |
 # tested with Cloudflare WARP, Wintun, OpenVPN and has been always successful in detecting the correct network adapter/interface         
               else {
 
-                write-host "detected active network adapter is virtual but not virtual Hyper-V adapter, choosing the second prioritized adapter/interface based on route metric" -ForegroundColor Yellow
+                write-host "Detected active network adapter is virtual but not virtual Hyper-V adapter, most likely a VPN virtual network adapter, choosing the second prioritized adapter/interface based on route metric" -ForegroundColor Yellow
 
 
                 $ActiveNetworkInterface = Get-NetRoute -DestinationPrefix '0.0.0.0/0', '::/0' |
@@ -102,7 +102,7 @@ $ActiveNetworkInterface = Get-NetRoute -DestinationPrefix '0.0.0.0/0', '::/0' |
         }
 
        
-        write-host "final correct adapter" -ForegroundColor Magenta
+        write-host "This is the final detected network adapter this module is going to set Secure DNS for" -ForegroundColor Magenta
         $ActiveNetworkInterface
 
 
@@ -303,7 +303,6 @@ $TaskPrincipal = New-ScheduledTaskPrincipal -LogonType S4U -UserId $env:USERNAME
 
 
 
-
 # trigger 1
 $CIMTriggerClass =
 Get-CimClass -ClassName MSFT_TaskEventTrigger -Namespace Root/Microsoft/Windows/TaskScheduler:MSFT_TaskEventTrigger
@@ -313,6 +312,7 @@ $EventTrigger.Subscription =
 <QueryList><Query Id="0" Path="Microsoft-Windows-DNS-Client/Operational"><Select Path="Microsoft-Windows-DNS-Client/Operational">*[System[Provider[@Name='Microsoft-Windows-DNS-Client'] and EventID=1013]]</Select></Query></QueryList>
 "@
 $EventTrigger.Enabled = $True
+$EventTrigger.ExecutionTimeLimit = "PT1M"
 
 
 
@@ -321,7 +321,7 @@ $Time =
 New-ScheduledTaskTrigger `
   -Once -At (Get-Date).AddHours(1) `
   -RandomDelay (New-TimeSpan -Seconds 30) `
-  -RepetitionInterval (New-TimeSpan -Hours 2)
+  -RepetitionInterval (New-TimeSpan -Hours 2) `
 
 
 
@@ -329,7 +329,7 @@ New-ScheduledTaskTrigger `
 Register-ScheduledTask -Action $action -Trigger $EventTrigger,$Time -Principal $TaskPrincipal -TaskPath "DDoH" -TaskName "Dynamic DoH Server IP check" -Description "Checks for New IPs of our Dynamic DoH server"
 
 # define advanced settings for the task
-$TaskSettings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -Compatibility Win8 -StartWhenAvailable
+$TaskSettings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -Compatibility Win8 -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Minutes 1)
 
 # add advanced settings we defined to the task
 Set-ScheduledTask -TaskPath "DDoH" -TaskName "Dynamic DoH Server IP check" -Settings $TaskSettings 
@@ -338,14 +338,9 @@ Set-ScheduledTask -TaskPath "DDoH" -TaskName "Dynamic DoH Server IP check" -Sett
 
 
 
-
-
-
 }
 
 
 
-
 } # end of main function
-
 
