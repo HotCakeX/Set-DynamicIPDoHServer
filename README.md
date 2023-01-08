@@ -60,4 +60,4 @@ DNS queries made to Cloudflare's 1.1.1.1 will be un-encrypted and in plain text.
  
 ---
 
-🏴 Disclaimer: neither me, nor this module, is affiliated with serverless-dns, however, since it's a great product and I personally use it, I decided to share this module to help easily use it on Windows.
+🏴 Disclaimer: I'm not the developer of Serverless-dns, however, since it's a great product and I personally use it, I decided to share this module so that Windows users can easily use it.
