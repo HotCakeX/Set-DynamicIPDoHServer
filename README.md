@@ -9,7 +9,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/HotCakeX/Set-DynamicIPDoHServer"><img src="https://raw.githubusercontent.com/HotCakeX/Set-DynamicIPDoHServer/main/GitHubIcon.png" alt="Avatar" width="200"></a>
+  <a href="https://github.com/HotCakeX/Set-DynamicIPDoHServer"><img src="https://raw.githubusercontent.com/HotCakeX/Set-DynamicIPDoHServer/main/GitHubIcon.png" alt="Avatar" width="300"></a>
 
   <h3 align="center">💎 Use a DNS over HTTPS server that doesn't have a stable IP address, on Windows 11 💎</h3>
 
