@@ -81,7 +81,7 @@ That means it will detect the correct network adapter/interface even if you are 
 
 You can create a self-hosted DoH server for free on Cloudflare or other providers, with custom domain name and dynamic IP addresses, which are hard or costly for ISPs, governments etc. to block
 
-please refer to the GitHub repository of serverless-dns for more info: https://github.com/serverless-dns/serverless-dns
+please refer to the [GitHub repository of serverless-dns](https://github.com/serverless-dns/serverless-dns) for more info
 
 
 
