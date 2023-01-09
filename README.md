@@ -96,7 +96,7 @@ please refer to the GitHub repository of serverless-dns for more info: https://g
   -  as soon as Windows detects the current DNS servers are unreachable
   -  every 2 hours in order to check for new IP changes for the dynamic DoH server
 
-You can fine-tune the interval in Task Scheduler GUI if you like. I haven't had any downtimes in my tests because the module runs milliseconds after Windows detects DNS servers are unreachable, and even then, Windows still maintains the current active connections using the DNS cache. if your experience is different, please let me know on Github.
+You can fine-tune the interval in Task Scheduler GUI if you like. I haven't had any downtimes in my tests because the module runs milliseconds after Windows detects DNS servers are unreachable, and even then, Windows still maintains the current active connections using the DNS cache. if your experience is different, please let me know [on GitHub](https://github.com/HotCakeX/Set-DynamicIPDoHServer/issues).
 
 * the module and the scheduled task will use both IPv4s and IPv6s of the dynamic DoH server. the task will run whether or not any user is logged on.
 
