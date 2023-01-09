@@ -69,12 +69,19 @@
 
 
 This module will automatically identify the correct and active network adapter/interface and set the Secure DNS settings for it based on parameters supplied by user.
-even if Hyper-V virtual switches (Internal, Private, External) are being used and the physical network adapter is virtualized by Hyper-V virtual switch manager or
-VPN's virtual network adapter is being used, all at the same time, the module will still find and enable DoH settings for the correct adapter.
+That means it will detect the correct network adapter/interface even if you are using:
+
+- Windows built-in VPN connections (PPTP, L2TP, SSTP etc.)
+- OpenVPN
+- TUN/TAP virtual adapters (a lot of programs use them, including WireGuard)
+- Hyper-V virtual switches (Internal, Private, External, all at the same time)
+- Cloudflare WARP client
+
+
 
 You can create a self-hosted DoH server for free on Cloudflare or other providers, with custom domain name and dynamic IP addresses, which are hard or costly for ISPs, governments etc. to block
 
-please refer to the Github repository of serverless-dns for more info: https://github.com/serverless-dns/serverless-dns
+please refer to the GitHub repository of serverless-dns for more info: https://github.com/serverless-dns/serverless-dns
 
 
 
@@ -89,7 +96,7 @@ please refer to the Github repository of serverless-dns for more info: https://g
   -  as soon as Windows detects the current DNS servers are unreachable
   -  every 2 hours in order to check for new IP changes for the dynamic DoH server
 
-You can fine-tune the interval in Task Scheduler GUI if you like. I haven't had any downtimes in my tests because the module runs miliseconds after Windows detects DNS servers are unreachable, and even then, Windows still maintains the current active connections using the DNS cache. if your experience is different, please let me know on Github.
+You can fine-tune the interval in Task Scheduler GUI if you like. I haven't had any downtimes in my tests because the module runs milliseconds after Windows detects DNS servers are unreachable, and even then, Windows still maintains the current active connections using the DNS cache. if your experience is different, please let me know on Github.
 
 * the module and the scheduled task will use both IPv4s and IPv6s of the dynamic DoH server. the task will run whether or not any user is logged on.
 
@@ -147,7 +154,7 @@ set-dynamicIPDoHServer -DoHTemplate "https://example.com/" -DoHDomain "example.c
 
 ---
 
-🏴 Disclaimer: I'm not the developer of Serverless-dns, however, since it's a great product and I personally use it, I decided to share this module so that Windows users can easily use it.
+🏴 I'm not the developer of Serverless-dns, however, since it's a great product and I personally use it, I decided to share this module so that Windows users can easily use it.
 
 
 
