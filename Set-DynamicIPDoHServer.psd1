@@ -12,7 +12,7 @@
 RootModule = 'Set-DynamicIPDoHServer.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.9'
+ModuleVersion = '0.1.1'
 
 # Supported PSEditions
 CompatiblePSEditions = @("Desktop","Core")
@@ -60,17 +60,14 @@ using module's name:  set-dynamicIPDoHServer -DoHTemplate "https://example.com/"
 
 ✅ Once you run this module for the first time and supply it with your DoH template and DoH domain, it will create a scheduled task that will run the module automatically based on 2 distinct criteria:
 
-1) as soon as Windows detects the current DNS servers are unreachable
-2) every 2 hours in order to check for new IP changes for the dynamic DoH server.
+    1) as soon as Windows detects the current DNS servers are unreachable
+    2) every 2 hours in order to check for new IP changes for the dynamic DoH server.
 
-You can fine-tune the interval in Task Scheduler GUI if you like. I haven't had any downtimes in my tests because the module runs milliseconds after Windows detects DNS servers are unreachable,
-and even then, Windows still maintains the current active connections using the DNS cache. if your experience is different, please let me know on GitHub.
+You can fine-tune the interval in Task Scheduler GUI if you like. I haven't had any downtimes in my tests because the module runs milliseconds after Windows detects DNS servers are unreachable, and even then, Windows still maintains the current active connections using the DNS cache. if your experience is different, please let me know on GitHub.
 
 ✅ the module and the scheduled task will use both IPv4s and IPv6s of the dynamic DoH server. the task will run whether or not any user is logged on.
 
-✅ in order to make sure the module will be able to always acquire the IP addresses of the dynamic DoH server, even when the currently set IPv4s and IPv6s are outdated,
-it will first attempt to use the DNS servers set on the system, if it fails to resolve the DoH domain, it will then use Cloudflare's 1.1.1.1 to resolve the IP addresses of the dynamic DoH server.
-DNS queries made to Cloudflare's 1.1.1.1 will be un-encrypted and in plain text.
+✅ in order to make sure the module will always be able to acquire the IP addresses of the dynamic DoH server, even when the currently set IPv4s and IPv6s are outdated, it will first attempt to use the DNS servers set on the system (DNSSEC-aware query), if it fails to resolve the DoH domain, it will then use Cloudflare's Encrypted API using TLS 1.3 and TLS_CHACHA20_POLY1305_SHA256 cipher suite, which are the best encryption algorithms available.
 
 🛑 Make sure you have the latest stable PowerShell installed from GitHub before running this module: https://GitHub.com/PowerShell/PowerShell/releases/latest
 (Store installed version currently not supported, but soon will be)
@@ -170,6 +167,8 @@ PrivateData = @{
 * 0.0.7 modified the scheduled task trigger to run every 2 hours and added a 2nd trigger so the module will run the moment system detects DNS failure
 * 0.0.8 fixed the typo in the line above, literally, improved PowerShell Gallery description, and set the scheduled task to end if it runs continiously longer than 1 minute
 * 0.0.9 improved active network adapter detection logic to support Windows built-in VPN client connections, improved the description text and added new icon
+* 0.1.0 Now when system DNS is unavailable, the module will use Encrypted Cloudflare API using TLS 1.3 and TLS_CHACHA20_POLY1305_SHA256 cipher suite, so everything is end-to-end encrypted. also made the system DNS query DNSSEC-aware.
+* 0.1.1 Fixed a typo in the description of PowerShell gallery ¯\_(ツ)_/¯
 "@
 
         # Prerelease string of this module
