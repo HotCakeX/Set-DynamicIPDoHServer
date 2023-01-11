@@ -100,9 +100,7 @@ You can fine-tune the interval in Task Scheduler GUI if you like. I haven't had 
 
 * the module and the scheduled task will use both IPv4s and IPv6s of the dynamic DoH server. the task will run whether or not any user is logged on.
 
-* in order to make sure the module will be able to always acquire the IP addresses of the dynamic DoH server, even when the currently set IPv4s and IPv6s are outdated,
-it will first attempt to use the DNS servers set on the system, if it fails to resolve the DoH domain, it will then use Cloudflare's 1.1.1.1 to resolve the IP addresses of the dynamic DoH server.
-DNS queries made to Cloudflare's 1.1.1.1 will be un-encrypted and in plain text.
+* in order to make sure the module will always be able to acquire the IP addresses of the dynamic DoH server, even when the currently set IPv4s and IPv6s are outdated, it will first attempt to use the DNS servers set on the system [(DNSSEC-aware query)](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/jj200221(v=ws.11), if it fails to resolve the DoH domain, it will then use [Cloudflare's Encrypted API](https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/make-api-requests/) using TLS 1.3 and TLS_CHACHA20_POLY1305_SHA256 cipher suite, which are the best encryption algorithms available.
 
 
 <p align="right"><a href="#readme-top">💡(back to top)</a></p>
