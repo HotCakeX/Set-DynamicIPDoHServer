@@ -193,15 +193,16 @@ remove-item "HKLM:System\CurrentControlSet\Services\Dnscache\InterfaceSpecificPa
 # get the new IPv4s for $DoHDomain
 try {
   Write-Host "Using System DNS to get IPv4s for $DoHDomain" -ForegroundColor Magenta;
-  $NewIPsV4 = (Resolve-DnsName -Name $DoHDomain -Type A -ErrorAction Stop).ipaddress 
-}
-catch {
-  Write-Host "System DNS failed, using 1.1.1.1 from Cloudflare to to get IPv4s for $DoHDomain" -ForegroundColor Magenta;
-  $NewIPsV4 = (Resolve-DnsName -Name $DoHDomain -Server 1.1.1.1 -Type A).ipaddress
-} 
+  $NewIPsV4 = (Resolve-DnsName -Name $DoHDomain -DnssecOk -Type A -ErrorAction Stop).ipaddress 
+  }
+  catch {
 
+  Write-Host "System DNS failed, using Encrypted Cloudflare API to to get IPv4s for $DoHDomain" -ForegroundColor Magenta;
 
+  $NewIPsV4 = curl --tlsv1.3 --tls13-ciphers TLS_CHACHA20_POLY1305_SHA256 --http2 -H "accept: application/dns-json" "https://1.1.1.1/dns-query?name=$dohdomain&type=A" 
+  $NewIPsV4 = ($NewIPsV4 | ConvertFrom-Json).answer.data
 
+  } 
 
 
 # loop through each IPv4
@@ -229,13 +230,18 @@ New-ItemProperty -Path $Path -Name "DohFlags" -Value 1 -PropertyType Qword -Forc
 
 # get the new IPv6s for $DoHDomain
 try {
-    Write-Host "Using System DNS to get IPv6s for $DoHDomain" -ForegroundColor Magenta;
-    $NewIPsV6 = (Resolve-DnsName -Name $DoHDomain -Type AAAA -ErrorAction Stop).ipaddress 
+  Write-Host "Using System DNS to get IPv6s for $DoHDomain" -ForegroundColor Magenta;
+  $NewIPsV6 = (Resolve-DnsName -Name $DoHDomain -DnssecOk -Type AAAA -ErrorAction Stop).ipaddress 
   }
   catch {
-    Write-Host "System DNS failed, using 1.1.1.1 from Cloudflare to get IPv6s for $DoHDomain" -ForegroundColor Magenta;
-    $NewIPsV6 = (Resolve-DnsName -Name $DoHDomain -Server 1.1.1.1 -Type AAAA).ipaddress
+
+  Write-Host "System DNS failed, using Encrypted Cloudflare API to to get IPv6s for $DoHDomain" -ForegroundColor Magenta;
+
+  $NewIPsV6 = curl --tlsv1.3 --tls13-ciphers TLS_CHACHA20_POLY1305_SHA256 --http2 -H "accept: application/dns-json" "https://1.1.1.1/dns-query?name=$dohdomain&type=AAAA" 
+  $NewIPsV6 = ($NewIPsV6 | ConvertFrom-Json).answer.data
+
   } 
+
 
 # loop through each IPv6
 $NewIPsV6 | foreach-Object {
