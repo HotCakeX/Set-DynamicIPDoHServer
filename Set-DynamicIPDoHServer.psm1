@@ -179,6 +179,13 @@ Set-DnsClientServerAddress -InterfaceIndex $ActiveNetworkInterface.ifIndex -Rese
 
 
 
+# Enables "TLS_CHACHA20_POLY1305_SHA256" Cipher Suite for Windows 11, if necessary, because it's disabled by default
+# cURL will need that cipher suite to perform encrypted DNS query, it uses Windows Schannel
+if (-NOT ((Get-TlsCipherSuite).name -contains "TLS_CHACHA20_POLY1305_SHA256"))
+{Enable-TlsCipherSuite -Name "TLS_CHACHA20_POLY1305_SHA256"}
+
+
+
 
 
 # delete all other previous DoH settings for ALL Interface - Windows behavior in settings when changing DoH settings is to delete all DoH settings for the interface we are modifying 
