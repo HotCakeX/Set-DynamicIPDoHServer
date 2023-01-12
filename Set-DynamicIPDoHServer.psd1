@@ -12,7 +12,7 @@
 RootModule = 'Set-DynamicIPDoHServer.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.1'
+ModuleVersion = '0.1.2'
 
 # Supported PSEditions
 CompatiblePSEditions = @("Desktop","Core")
@@ -169,6 +169,7 @@ PrivateData = @{
 * 0.0.9 improved active network adapter detection logic to support Windows built-in VPN client connections, improved the description text and added new icon
 * 0.1.0 Now when system DNS is unavailable, the module will use Encrypted Cloudflare API using TLS 1.3 and TLS_CHACHA20_POLY1305_SHA256 cipher suite, so everything is end-to-end encrypted. also made the system DNS query DNSSEC-aware.
 * 0.1.1 Fixed a typo in the description of PowerShell gallery ¯\_(ツ)_/¯
+* 0.1.2 Added a check to enable "TLS_CHACHA20_POLY1305_SHA256" if it's disabled (which is the default in Windows 11, at the moment), because cURL will need that cipher suite to perform encrypted DNS query, it uses Windows Schannel
 "@
 
         # Prerelease string of this module
