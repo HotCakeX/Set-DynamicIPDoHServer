@@ -89,18 +89,26 @@ please refer to the [GitHub repository of serverless-dns](https://github.com/ser
 <!-- FEATURES -->
 ## Features
 
+* Strong End-to-End encrypted workflow
 
 * Created, targeted and tested on the latest version of Windows 11, on physical hardware and Virtual Machines
 
 * Once you run this module for the first time and supply it with your DoH template and DoH domain, it will create a scheduled task that will run the module automatically based on 2 distinct criteria:
   -  as soon as Windows detects the current DNS servers are unreachable
-  -  every 2 hours in order to check for new IP changes for the dynamic DoH server
-
-You can fine-tune the interval in Task Scheduler GUI if you like. I haven't had any downtimes in my tests because the module runs milliseconds after Windows detects DNS servers are unreachable, and even then, Windows still maintains the current active connections using the DNS cache. if your experience is different, please let me know [on GitHub](https://github.com/HotCakeX/Set-DynamicIPDoHServer/issues).
+  -  every 6 hours in order to check for new IP changes for the dynamic DoH server
+  - You can fine-tune the interval in Task Scheduler GUI if you like. I haven't had any downtimes in my tests because the module runs milliseconds after Windows detects DNS servers are unreachable, and even then, Windows still maintains the current active connections using the DNS cache. if your experience is different, please let me know [on GitHub](https://github.com/HotCakeX/Set-DynamicIPDoHServer/issues).
 
 * the module and the scheduled task will use both IPv4s and IPv6s of the dynamic DoH server. the task will run whether or not any user is logged on.
 
-* in order to make sure the module will always be able to acquire the IP addresses of the dynamic DoH server, even when the currently set IPv4s and IPv6s are outdated, it will first attempt to use the DNS servers set on the system <a href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2012-R2-and-2012/jj200221(v=ws.11)">(DNSSEC-aware query)</a>, if it fails to resolve the DoH domain, it will then use [Cloudflare's Encrypted API](https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/make-api-requests/) using [`TLS 1.3`](https://curl.se/docs/manpage.html#--tls13-ciphers) and [`TLS_CHACHA20_POLY1305_SHA256`](https://curl.se/docs/ssl-ciphers.html) cipher suite, which are the best encryption algorithms available.
+
+* in order to make sure the module will always be able to acquire the IP addresses of the dynamic DoH server, even when the currently set IPv4s and IPv6s are outdated, the module performs DNS queries in this order:
+
+  - First tries using [Cloudflare's main encrypted API](https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/make-api-requests/) to get IP addresses of our DoH domain
+  - if 1st one fails, tries using Cloudflare's secondary encrypted API to get IP addresses of our DoH domain
+  - if 2nd one fails, tries using [Google's main encrypted API](https://developers.google.com/speed/public-dns/docs/doh/) to get IP addresses of our DoH domain
+  - if 3rd one fails, tries using Google's secondary encrypted API to get IP addresses of our DoH domain
+
+All of the connections to Cloudflare and Google servers use direct IP, are set to use [`TLS 1.3`](https://curl.se/docs/manpage.html#--tls13-ciphers) with [`TLS_CHACHA20_POLY1305_SHA256`](https://curl.se/docs/ssl-ciphers.html) cipher suite and use `HTTP/2`
 
 
 <p align="right"><a href="#readme-top">💡(back to top)</a></p>
