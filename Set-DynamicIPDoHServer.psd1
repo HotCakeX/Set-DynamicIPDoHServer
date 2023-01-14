@@ -12,7 +12,7 @@
 RootModule = 'Set-DynamicIPDoHServer.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.2'
+ModuleVersion = '0.1.3'
 
 # Supported PSEditions
 CompatiblePSEditions = @("Desktop","Core")
@@ -55,19 +55,28 @@ Example usage:
 using module's alias: set-ddoh -DoHTemplate "https://example.com/" -DoHDomain "example.com"
 using module's name:  set-dynamicIPDoHServer -DoHTemplate "https://example.com/" -DoHDomain "example.com"
 
+✅ Strong End-to-End encrypted workflow
 
 ✅ Created, targeted and tested on the latest version of Windows 11, on physical hardware and Virtual Machines
 
 ✅ Once you run this module for the first time and supply it with your DoH template and DoH domain, it will create a scheduled task that will run the module automatically based on 2 distinct criteria:
 
     1) as soon as Windows detects the current DNS servers are unreachable
-    2) every 2 hours in order to check for new IP changes for the dynamic DoH server.
+    2) every 6 hours in order to check for new IP changes for the dynamic DoH server.
 
 You can fine-tune the interval in Task Scheduler GUI if you like. I haven't had any downtimes in my tests because the module runs milliseconds after Windows detects DNS servers are unreachable, and even then, Windows still maintains the current active connections using the DNS cache. if your experience is different, please let me know on GitHub.
 
 ✅ the module and the scheduled task will use both IPv4s and IPv6s of the dynamic DoH server. the task will run whether or not any user is logged on.
 
-✅ in order to make sure the module will always be able to acquire the IP addresses of the dynamic DoH server, even when the currently set IPv4s and IPv6s are outdated, it will first attempt to use the DNS servers set on the system (DNSSEC-aware query), if it fails to resolve the DoH domain, it will then use Cloudflare's Encrypted API using TLS 1.3 and TLS_CHACHA20_POLY1305_SHA256 cipher suite, which are the best encryption algorithms available.
+✅ in order to make sure the module will always be able to acquire the IP addresses of the dynamic DoH server, even when the currently set IPv4s and IPv6s are outdated, the module performs DNS queries in this order:
+
+   1. First tries using Cloudflare's main encrypted API to get IP addresses of our DoH domain
+   2. if 1st one fails, tries using Cloudflare's secondary encrypted API to get IP addresses of our DoH domain
+   3. if 2nd one fails, tries using Google's main encrypted API to get IP addresses of our DoH domain
+   4. if 3rd one fails, tries using Google's secondary encrypted API to get IP addresses of our DoH domain
+
+ All of the connections to Cloudflare and Google servers use direct IP, are set to use TLS 1.3 with TLS_CHACHA20_POLY1305_SHA256 cipher suite and use HTTP/2
+ 
 
 🛑 Make sure you have the latest stable PowerShell installed from GitHub before running this module: https://GitHub.com/PowerShell/PowerShell/releases/latest
 (Store installed version currently not supported, but soon will be)
@@ -170,6 +179,7 @@ PrivateData = @{
 * 0.1.0 Now when system DNS is unavailable, the module will use Encrypted Cloudflare API using TLS 1.3 and TLS_CHACHA20_POLY1305_SHA256 cipher suite, so everything is end-to-end encrypted. also made the system DNS query DNSSEC-aware.
 * 0.1.1 Fixed a typo in the description of PowerShell gallery ¯\_(ツ)_/¯
 * 0.1.2 Added a check to enable "TLS_CHACHA20_POLY1305_SHA256" if it's disabled (which is the default in Windows 11, at the moment), because cURL will need that cipher suite to perform encrypted DNS query, it uses Windows Schannel
+* 0.1.3 Added Google encrypted API to the list of DNS query attempts. the scheduled task will now run every 6 hours instead of every 2 hours because the event-based trigger has proven to be very reliable (if you're already using the module, you can delete the scheduled task from Task Scheduler and run the module again with your DoH domain and template so that the new interval will be set or change it manually). changed some text colors to make them more readable and distinguishable.
 "@
 
         # Prerelease string of this module
