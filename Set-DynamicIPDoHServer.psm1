@@ -57,6 +57,10 @@ try {
 
 
 
+
+
+
+
 # get the currently active network interface/adapter that is being used for Internet access
 
 
@@ -76,7 +80,7 @@ Get-NetAdapter -ErrorAction SilentlyContinue | Where-Object {$_.ifIndex -eq $Act
 
      {
                 
-     Write-Host "This adapter doesn't even exist in get-Netadapter results and doesn't have interface index, must be built-in Windows VPN client adapter" -ForegroundColor Green
+     Write-Host "This adapter doesn't even exist in get-Netadapter results and doesn't have interface index, must be built-in Windows VPN client adapter" -ForegroundColor Blue
             
             
      # then we get the 2nd adapter from the top
@@ -101,14 +105,14 @@ Get-NetAdapter -ErrorAction SilentlyContinue | Where-Object {$_.ifIndex -eq $Act
          # check if the detected active interface from the previous step is virtual, if it is, checks if it's an external virtual Hyper-V network adapter or VPN virtual network adapter
          if ((Get-NetAdapter | Where-Object { $_.InterfaceGuid -eq $ActiveNetworkInterface.InterfaceGuid}).Virtual)
          {
-             Write-Host "Interface is virtual, trying to find out if it's a VPN virtual adapter or Hyper-V External virtual switch" -ForegroundColor Magenta
+             Write-Host "Interface is virtual, trying to find out if it's a VPN virtual adapter or Hyper-V External virtual switch" -ForegroundColor DarkYellow
 
              # if it's an external virtual Hyper-V network adapter, it must be the correct adapter
              if ($ActiveNetworkInterface.InterfaceDescription -like "*Hyper-V Virtual Ethernet Adapter*"  )
 
              {
 
-             Write-Host "The detected active network adapter is virtual but that's OK because it's Hyper-V External switch" -ForegroundColor Magenta
+             Write-Host "The detected active network adapter is virtual, it's Hyper-V External switch" -ForegroundColor Blue
              $ActiveNetworkInterface = $ActiveNetworkInterface
              }
     
@@ -117,7 +121,7 @@ Get-NetAdapter -ErrorAction SilentlyContinue | Where-Object {$_.ifIndex -eq $Act
              # tested with Cloudflare WARP (that doesn't create a separate adapter), Wintun, TAP, OpenVPN and has been always successful in detecting the correct network adapter/interface         
              else {
 
-             write-host "Detected active network adapter is virtual but not virtual Hyper-V adapter, most likely a VPN virtual network adapter, choosing the second prioritized adapter/interface based on route metric" -ForegroundColor Yellow
+             write-host "Detected active network adapter is virtual but not virtual Hyper-V adapter, most likely a VPN virtual network adapter, choosing the second prioritized adapter/interface based on route metric" -ForegroundColor Cyan
 
 
 
@@ -135,7 +139,7 @@ Get-NetAdapter -ErrorAction SilentlyContinue | Where-Object {$_.ifIndex -eq $Act
 
 
 
-write-host "This is the final detected network adapter this module is going to set Secure DNS for" -ForegroundColor Magenta
+write-host "This is the final detected network adapter this module is going to set Secure DNS for" -ForegroundColor DarkMagenta
 $ActiveNetworkInterface
 
 
@@ -197,19 +201,54 @@ remove-item "HKLM:System\CurrentControlSet\Services\Dnscache\InterfaceSpecificPa
 
 
 
+
+
+
+
+
+
 # get the new IPv4s for $DoHDomain
-try {
-  Write-Host "Using System DNS to get IPv4s for $DoHDomain" -ForegroundColor Magenta;
-  $NewIPsV4 = (Resolve-DnsName -Name $DoHDomain -DnssecOk -Type A -ErrorAction Stop).ipaddress 
-  }
-  catch {
+# we use --ssl-no-revoke because when system DNS is unreachable, CRL check will fail in cURL.
+# it is OKAY, we're using trusted Cloudflare and Google servers the certificates of which explicitly mention their IP addresses (in Subject Alternative Name) that we are using to connect to them
+    
 
-  Write-Host "System DNS failed, using Encrypted Cloudflare API to to get IPv4s for $DoHDomain" -ForegroundColor Magenta;
+Write-Host "Using the main Cloudflare Encrypted API over $DoHTemplate to resolve $DoHDomain" -ForegroundColor Green;
+$NewIPsV4 = curl --ssl-no-revoke --max-time 10 --doh-url $DoHTemplate --tlsv1.3 --tls13-ciphers TLS_CHACHA20_POLY1305_SHA256 --http2 -H "accept: application/dns-json" "https://1.1.1.1/dns-query?name=$dohdomain&type=A"
+$NewIPsV4 = ($NewIPsV4 | ConvertFrom-Json).answer.data
 
-  $NewIPsV4 = curl --tlsv1.3 --tls13-ciphers TLS_CHACHA20_POLY1305_SHA256 --http2 -H "accept: application/dns-json" "https://1.1.1.1/dns-query?name=$dohdomain&type=A" 
-  $NewIPsV4 = ($NewIPsV4 | ConvertFrom-Json).answer.data
+if (!$NewIPsV4){
 
-  } 
+ Write-Host "First try failed, now using the secondary Encrypted Cloudflare API to to get IPv4s for $DoHDomain" -ForegroundColor Blue;
+
+$NewIPsV4 = curl --ssl-no-revoke --max-time 10 --tlsv1.3 --tls13-ciphers TLS_CHACHA20_POLY1305_SHA256 --http2 -H "accept: application/dns-json" "https://1.0.0.1/dns-query?name=$dohdomain&type=A" 
+$NewIPsV4 = ($NewIPsV4 | ConvertFrom-Json).answer.data
+
+}
+
+if (!$NewIPsV4) {
+  
+    Write-Host "Second try failed, now using the main Encrypted Google API to to get IPv4s for $DoHDomain" -ForegroundColor Yellow;
+
+    $NewIPsV4 = curl --ssl-no-revoke --max-time 10 --tlsv1.3 --tls13-ciphers TLS_CHACHA20_POLY1305_SHA256 --http2 -H "accept: application/dns-json" "https://8.8.8.8/resolve?name=$dohdomain&type=A" 
+    $NewIPsV4 = ($NewIPsV4 | ConvertFrom-Json).answer.data
+
+}
+
+
+if (!$NewIPsV4) {
+  
+    Write-Host "Third try failed, now using the second Encrypted Google API to to get IPv4s for $DoHDomain" -ForegroundColor DarkRed;
+
+    $NewIPsV4 = curl --ssl-no-revoke --max-time 10 --tlsv1.3 --tls13-ciphers TLS_CHACHA20_POLY1305_SHA256 --http2 -H "accept: application/dns-json" "https://8.8.4.4/resolve?name=$dohdomain&type=A" 
+    $NewIPsV4 = ($NewIPsV4 | ConvertFrom-Json).answer.data
+
+}
+
+
+
+
+
+
 
 
 # loop through each IPv4
@@ -235,19 +274,54 @@ New-ItemProperty -Path $Path -Name "DohFlags" -Value 1 -PropertyType Qword -Forc
 
 
 
+
+
+
+
+
 # get the new IPv6s for $DoHDomain
-try {
-  Write-Host "Using System DNS to get IPv6s for $DoHDomain" -ForegroundColor Magenta;
-  $NewIPsV6 = (Resolve-DnsName -Name $DoHDomain -DnssecOk -Type AAAA -ErrorAction Stop).ipaddress 
-  }
-  catch {
+# we use --ssl-no-revoke because when system DNS is unreachable, CRL check will fail in cURL.
+# it is OKAY, we're using trusted Cloudflare and Google servers the certificates of which explicitly mention their IP addresses (in Subject Alternative Name) that we are using to connect to them
+    
 
-  Write-Host "System DNS failed, using Encrypted Cloudflare API to to get IPv6s for $DoHDomain" -ForegroundColor Magenta;
+Write-Host "Using the main Cloudflare Encrypted API over $DoHTemplate to resolve $DoHDomain" -ForegroundColor Green;
+$NewIPsV6 = curl --ssl-no-revoke --max-time 10 --doh-url $DoHTemplate --tlsv1.3 --tls13-ciphers TLS_CHACHA20_POLY1305_SHA256 --http2 -H "accept: application/dns-json" "https://1.1.1.1/dns-query?name=$dohdomain&type=AAAA"
+$NewIPsV6 = ($NewIPsV6 | ConvertFrom-Json).answer.data
 
-  $NewIPsV6 = curl --tlsv1.3 --tls13-ciphers TLS_CHACHA20_POLY1305_SHA256 --http2 -H "accept: application/dns-json" "https://1.1.1.1/dns-query?name=$dohdomain&type=AAAA" 
-  $NewIPsV6 = ($NewIPsV6 | ConvertFrom-Json).answer.data
+if (!$NewIPsV6){
 
-  } 
+ Write-Host "First try failed, now using the secondary Encrypted Cloudflare API to to get IPv6s for $DoHDomain" -ForegroundColor Blue;
+
+$NewIPsV6 = curl --ssl-no-revoke --max-time 10 --tlsv1.3 --tls13-ciphers TLS_CHACHA20_POLY1305_SHA256 --http2 -H "accept: application/dns-json" "https://1.0.0.1/dns-query?name=$dohdomain&type=AAAA" 
+$NewIPsV6 = ($NewIPsV6 | ConvertFrom-Json).answer.data
+
+}
+
+if (!$NewIPsV6) {
+  
+    Write-Host "Second try failed, now using the main Encrypted Google API to to get IPv6s for $DoHDomain" -ForegroundColor Yellow;
+
+    $NewIPsV6 = curl --ssl-no-revoke --max-time 10 --tlsv1.3 --tls13-ciphers TLS_CHACHA20_POLY1305_SHA256 --http2 -H "accept: application/dns-json" "https://8.8.8.8/resolve?name=$dohdomain&type=AAAA" 
+    $NewIPsV6 = ($NewIPsV6 | ConvertFrom-Json).answer.data
+
+}
+
+
+if (!$NewIPsV6) {
+  
+    Write-Host "Third try failed, now using the second Encrypted Google API to to get IPv6s for $DoHDomain" -ForegroundColor DarkRed;
+
+    $NewIPsV6 = curl --ssl-no-revoke --max-time 10 --tlsv1.3 --tls13-ciphers TLS_CHACHA20_POLY1305_SHA256 --http2 -H "accept: application/dns-json" "https://8.8.4.4/resolve?name=$dohdomain&type=AAAA" 
+    $NewIPsV6 = ($NewIPsV6 | ConvertFrom-Json).answer.data
+
+}
+
+
+
+
+
+
+
 
 
 # loop through each IPv6
@@ -359,9 +433,9 @@ $EventTrigger.ExecutionTimeLimit = "PT1M"
 # trigger 2
 $Time = 
 New-ScheduledTaskTrigger `
-  -Once -At (Get-Date).AddHours(1) `
+  -Once -At (Get-Date).AddHours(3) `
   -RandomDelay (New-TimeSpan -Seconds 30) `
-  -RepetitionInterval (New-TimeSpan -Hours 2) `
+  -RepetitionInterval (New-TimeSpan -Hours 6) `
 
 
 
