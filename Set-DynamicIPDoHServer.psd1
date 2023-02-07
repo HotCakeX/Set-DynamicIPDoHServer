@@ -8,29 +8,29 @@
 
 @{
 
-# Script module or binary module file associated with this manifest.
-RootModule = 'Set-DynamicIPDoHServer.psm1'
+    # Script module or binary module file associated with this manifest.
+    RootModule           = 'Set-DynamicIPDoHServer.psm1'
 
-# Version number of this module.
-ModuleVersion = '0.1.3'
+    # Version number of this module.
+    ModuleVersion        = '0.1.4'
 
-# Supported PSEditions
-CompatiblePSEditions = @("Desktop","Core")
+    # Supported PSEditions
+    CompatiblePSEditions = @("Desktop", "Core")
 
-# ID used to uniquely identify this module
-GUID = '85d391d8-097a-4394-b8b7-6eb98eeabb0e'
+    # ID used to uniquely identify this module
+    GUID                 = '85d391d8-097a-4394-b8b7-6eb98eeabb0e'
 
-# Author of this module
-Author = 'HotCakeX'
+    # Author of this module
+    Author               = 'HotCakeX'
 
-# Company or vendor of this module
-CompanyName = 'HotCakeX Inc'
+    # Company or vendor of this module
+    CompanyName          = 'SpyNetGirl'
 
-# Copyright statement for this module
-Copyright = '(c)2023'
+    # Copyright statement for this module
+    Copyright            = '(c)2023'
 
-# Description of the functionality provided by this module
-Description = @"
+    # Description of the functionality provided by this module
+    Description          = @"
 
 
 💎 Use a DNS over HTTPS server that doesn't have a stable IP address, on Windows 11 💎
@@ -89,82 +89,82 @@ https://GitHub.com/HotCakeX/Set-DynamicIPDoHServer
 
 "@
 
-# Minimum version of the PowerShell engine required by this module
-PowerShellVersion = '7.3'
+    # Minimum version of the PowerShell engine required by this module
+    PowerShellVersion    = '7.3'
 
-# Name of the PowerShell host required by this module
-# PowerShellHostName = ''
+    # Name of the PowerShell host required by this module
+    # PowerShellHostName = ''
 
-# Minimum version of the PowerShell host required by this module
-# PowerShellHostVersion = ''
+    # Minimum version of the PowerShell host required by this module
+    # PowerShellHostVersion = ''
 
-# Minimum version of Microsoft .NET Framework required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
-# DotNetFrameworkVersion = ''
+    # Minimum version of Microsoft .NET Framework required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
+    # DotNetFrameworkVersion = ''
 
-# Minimum version of the common language runtime (CLR) required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
-# ClrVersion = ''
+    # Minimum version of the common language runtime (CLR) required by this module. This prerequisite is valid for the PowerShell Desktop edition only.
+    # ClrVersion = ''
 
-# Processor architecture (None, X86, Amd64) required by this module
-# ProcessorArchitecture = ''
+    # Processor architecture (None, X86, Amd64) required by this module
+    # ProcessorArchitecture = ''
 
-# Modules that must be imported into the global environment prior to importing this module
-# RequiredModules = @()
+    # Modules that must be imported into the global environment prior to importing this module
+    # RequiredModules = @()
 
-# Assemblies that must be loaded prior to importing this module
-# RequiredAssemblies = @()
+    # Assemblies that must be loaded prior to importing this module
+    # RequiredAssemblies = @()
 
-# Script files (.ps1) that are run in the caller's environment prior to importing this module.
-# ScriptsToProcess = @()
+    # Script files (.ps1) that are run in the caller's environment prior to importing this module.
+    # ScriptsToProcess = @()
 
-# Type files (.ps1xml) to be loaded when importing this module
-# TypesToProcess = @()
+    # Type files (.ps1xml) to be loaded when importing this module
+    # TypesToProcess = @()
 
-# Format files (.ps1xml) to be loaded when importing this module
-# FormatsToProcess = @()
+    # Format files (.ps1xml) to be loaded when importing this module
+    # FormatsToProcess = @()
 
-# Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-# NestedModules = @()
+    # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
+    # NestedModules = @()
 
-# Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @("Set-DynamicIPDoHServer")
+    # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
+    FunctionsToExport    = @("Set-DynamicIPDoHServer")
 
-# Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
-CmdletsToExport = @("Set-DynamicIPDoHServer")
+    # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
+    CmdletsToExport      = @("Set-DynamicIPDoHServer")
 
-# Variables to export from this module
-VariablesToExport = '*'
+    # Variables to export from this module
+    VariablesToExport    = '*'
 
-# Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
-AliasesToExport = @("set-ddoh")
+    # Aliases to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no aliases to export.
+    AliasesToExport      = @("set-ddoh")
 
-# DSC resources to export from this module
-# DscResourcesToExport = @()
+    # DSC resources to export from this module
+    # DscResourcesToExport = @()
 
-# List of all modules packaged with this module
-# ModuleList = @()
+    # List of all modules packaged with this module
+    # ModuleList = @()
 
-# List of all files packaged with this module
-FileList = @("Set-DynamicIPDoHServer.psd1","Set-DynamicIPDoHServer.psm1")
+    # List of all files packaged with this module
+    FileList             = @("Set-DynamicIPDoHServer.psd1", "Set-DynamicIPDoHServer.psm1")
 
-# Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
-PrivateData = @{
+    # Private data to pass to the module specified in RootModule/ModuleToProcess. This may also contain a PSData hashtable with additional module metadata used by PowerShell.
+    PrivateData          = @{
 
-    PSData = @{
+        PSData = @{
 
-        # Tags applied to this module. These help with module discovery in online galleries.
-        Tags = @('Security', 'DNS', 'Windows', 'HTTPS', 'DynamicIP', 'DoH')
+            # Tags applied to this module. These help with module discovery in online galleries.
+            Tags         = @('Security', 'DNS', 'Windows', 'HTTPS', 'DynamicIP', 'DoH')
 
-        # A URL to the license for this module.
-        LicenseUri = 'https://GitHub.com/HotCakeX/Set-DynamicIPDoHServer'
+            # A URL to the license for this module.
+            LicenseUri   = 'https://GitHub.com/HotCakeX/Set-DynamicIPDoHServer'
 
-        # A URL to the main website for this project.
-        ProjectUri = 'https://GitHub.com/HotCakeX/Set-DynamicIPDoHServer'
+            # A URL to the main website for this project.
+            ProjectUri   = 'https://GitHub.com/HotCakeX/Set-DynamicIPDoHServer'
 
-        # A URL to an icon representing this module.
-        IconUri = 'https://raw.githubusercontent.com/HotCakeX/Set-DynamicIPDoHServer/main/PowerShellGalleryIcon.png'
+            # A URL to an icon representing this module.
+            IconUri      = 'https://raw.githubusercontent.com/HotCakeX/Set-DynamicIPDoHServer/main/PowerShellGalleryIcon.png'
 
-        # ReleaseNotes of this module
-        ReleaseNotes = @"
+            # ReleaseNotes of this module
+            ReleaseNotes = @"
 
 ## Version 
 * 0.0.1 First release
@@ -180,25 +180,26 @@ PrivateData = @{
 * 0.1.1 Fixed a typo in the description of PowerShell gallery ¯\_(ツ)_/¯
 * 0.1.2 Added a check to enable "TLS_CHACHA20_POLY1305_SHA256" if it's disabled (which is the default in Windows 11, at the moment), because cURL will need that cipher suite to perform encrypted DNS query, it uses Windows Schannel
 * 0.1.3 Added Google encrypted API to the list of DNS query attempts. the scheduled task will now run every 6 hours instead of every 2 hours because the event-based trigger has proven to be very reliable (if you're already using the module, you can delete the scheduled task from Task Scheduler and run the module again with your DoH domain and template so that the new interval will be set or change it manually). changed some text colors to make them more readable and distinguishable.
+* 0.1.4 Cleaned up all the empty lines, improved the functions and reduced repetitive codes
 "@
 
-        # Prerelease string of this module
-        # Prerelease = ''
+            # Prerelease string of this module
+            # Prerelease = ''
 
-        # Flag to indicate whether the module requires explicit user acceptance for install/update/save
-        # RequireLicenseAcceptance = $false
+            # Flag to indicate whether the module requires explicit user acceptance for install/update/save
+            # RequireLicenseAcceptance = $false
 
-        # External dependent modules of this module
-        # ExternalModuleDependencies = @()
+            # External dependent modules of this module
+            # ExternalModuleDependencies = @()
 
-    } # End of PSData hashtable
+        } # End of PSData hashtable
 
-} # End of PrivateData hashtable
+    } # End of PrivateData hashtable
 
-# HelpInfo URI of this module
-HelpInfoURI = 'https://GitHub.com/HotCakeX/Set-DynamicIPDoHServer'
+    # HelpInfo URI of this module
+    HelpInfoURI          = 'https://GitHub.com/HotCakeX/Set-DynamicIPDoHServer'
 
-# Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
-# DefaultCommandPrefix = ''
+    # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
+    # DefaultCommandPrefix = ''
 
 }
